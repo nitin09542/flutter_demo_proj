@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/chat_screen/chat_page.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -18,18 +19,27 @@ class _ProfilePage extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: myList.length==0?Center(child: CircularProgressIndicator()):
-        ListView.builder(
-            itemCount: myList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                  leading: const Icon(Icons.list),
-                  trailing:  Text(
-                    myList[index]['email'],
-                    style: TextStyle(color: Colors.green, fontSize: 15),
-                  ),
-                  title: Text(myList[index]['name']));
-            }));
+      body: myList.length == 0
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: myList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  child: ListTile(
+                      leading: const Icon(Icons.list),
+                      trailing: Text(
+                        myList[index]['email'],
+                        style: TextStyle(color: Colors.green, fontSize: 15),
+                      ),
+                      title: Text(myList[index]['name'])),
+                onTap: (){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ChatScreen(id: myList[index]['id'].toString(),)));
+
+                },
+                );
+              }),
+    );
   }
 
   Future<dynamic> getData() async {
